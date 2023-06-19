@@ -38,7 +38,7 @@ client.on('ready', async (guild) => {
 	if(channel){
 		patchnotes_channel = channel
 		main()
-		setInterval(main, 10 * 60 * 1000);
+		setInterval(main, 1 * 60 * 1000);
 	}
 });
 
@@ -243,26 +243,41 @@ async function main(){
 					// send message with embed, and patchnotes content
 					
 					
-					patchnotes_channel.send({embeds: [embed]})
-
+					patchnotes_channel.send({embeds: [embed]}).then(message => {
+						message.crosspost()
+						.then(() => console.log('Crossposted message'))
+						.catch(console.error);
+					})
 
 					// split content into 2000 character chunks, make sure to only split and line endings
 					let chunks = splitStringAtNewLine(content, 2000)
 					for (let chunk of chunks){
-						patchnotes_channel.send(chunk)
+						patchnotes_channel.send(chunk).then(message => {
+							message.crosspost()
+							.then(() => console.log('Crossposted message'))
+							.catch(console.error);
+						})
 					}
 				}
 				else
 				{
 					const embed = new EmbedBuilder()
 					embed.setTitle(`Branch ${branch} has been updated`)
-					patchnotes_channel.send({embeds: [embed]})
+					patchnotes_channel.send({embeds: [embed]}).then(message => {
+						message.crosspost()
+						.then(() => console.log('Crossposted message'))
+						.catch(console.error);
+					})
 				}
 			}
 		}else if(was_branch_updated){
 			const embed = new EmbedBuilder()
 			embed.setTitle(`Branch ${branch} has been updated`)
-			patchnotes_channel.send({embeds: [embed]})
+			patchnotes_channel.send({embeds: [embed]}).then(message => {
+				message.crosspost()
+				.then(() => console.log('Crossposted message'))
+				.catch(console.error);
+			})
 		}else{
 			console.log(`Branch ${branch} is up to date`)
 		}
